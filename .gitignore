@@ -1,0 +1,24 @@
+# Temporary-file naming conventions
+tmp
+*.tmp
+tmp.*
+*.tmp.*
+local
+*.local
+local.*
+*.local.*
+
+# Vim swap files and Python caches
+*.sw[a-z]
+.*.sw[a-z]
+*.py[cod]
+
+# Terraform files
+.terraform
+*.tfvars
+*.tfplan
+*.tfstate
+*.tfstate.*
+
+# Unzipped binaries
+bin
