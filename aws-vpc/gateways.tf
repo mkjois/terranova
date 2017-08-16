@@ -6,13 +6,14 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_egress_only_internet_gateway" "main" {
+  count = "${min(max(var.ngw_redundancy, 0), 1)}"
   vpc_id = "${aws_vpc.main.id}"
 }
 
 resource "aws_nat_gateway" "main" {
   count = "${min(max(var.ngw_redundancy, 0), length(data.aws_availability_zones.all.names))}"
-  allocation_id = "${element(aws_eip.ngw.*.id, count.index)}"
-  subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
+  allocation_id = "${aws_eip.ngw.*.id[count.index]}"
+  subnet_id = "${aws_subnet.public.*.id[count.index]}"
   depends_on = [ "aws_internet_gateway.main" ]
 }
 

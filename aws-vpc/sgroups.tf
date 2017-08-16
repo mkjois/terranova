@@ -1,5 +1,4 @@
-resource "aws_default_security_group" "allow_group" {
-  description = "Allow group traffic"
+resource "aws_default_security_group" "allow_self" {
   vpc_id = "${aws_vpc.main.id}"
   ingress {
     protocol = "-1"
@@ -15,12 +14,12 @@ resource "aws_default_security_group" "allow_group" {
     ipv6_cidr_blocks = [ "::/0" ]
   }
   tags {
-    Name = "default-allow-group"
+    Name = "default-allow-self"
   }
 }
 
 resource "aws_security_group" "allow_all" {
-  name = "allow-all"
+  name = "default-allow-all"
   description = "Allow all traffic"
   vpc_id = "${aws_vpc.main.id}"
   ingress {
@@ -43,7 +42,7 @@ resource "aws_security_group" "allow_all" {
 }
 
 resource "aws_security_group" "allow_http" {
-  name = "allow-http"
+  name = "default-allow-http"
   description = "Allow HTTP traffic"
   vpc_id = "${aws_vpc.main.id}"
   ingress {
@@ -66,7 +65,7 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_security_group" "allow_https" {
-  name = "allow-https"
+  name = "default-allow-https"
   description = "Allow HTTPS traffic"
   vpc_id = "${aws_vpc.main.id}"
   ingress {
@@ -89,7 +88,7 @@ resource "aws_security_group" "allow_https" {
 }
 
 resource "aws_security_group" "allow_ssh" {
-  name = "allow-ssh"
+  name = "default-allow-ssh"
   description = "Allow SSH traffic"
   vpc_id = "${aws_vpc.main.id}"
   ingress {
@@ -112,7 +111,7 @@ resource "aws_security_group" "allow_ssh" {
 }
 
 resource "aws_security_group" "allow_icmp" {
-  name = "allow-icmp"
+  name = "default-allow-icmp"
   description = "Allow ICMP traffic"
   vpc_id = "${aws_vpc.main.id}"
   ingress {

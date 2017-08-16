@@ -10,8 +10,3 @@ variable "ngw_redundancy" {
   description = "Number of NAT gateways. Maximum is the number of AZs in the region"
   default = 0
 }
-
-variable "ngw_primary" {
-  description = "Active NAT gateway. Must be in [0, ngw_redundancy)"
-  default = 0
-}

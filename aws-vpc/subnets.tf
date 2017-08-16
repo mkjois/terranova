@@ -26,7 +26,7 @@ resource "aws_subnet" "private" {
   cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 2 * count.index)}"
   ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 32 * count.index)}"
   tags {
-    Name = "${var.name}-private-${element(data.aws_availability_zone.all.*.name_suffix, count.index)}"
+    Name = "${var.name}-private-${data.aws_availability_zone.all.*.name_suffix[count.index]}"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_subnet" "public" {
   cidr_block = "${cidrsubnet(cidrsubnet(aws_vpc.main.cidr_block, 4, 2 * count.index + 1), 1, 0)}"
   ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 32 * count.index + 1)}"
   tags {
-    Name = "${var.name}-private-${element(data.aws_availability_zone.all.*.name_suffix, count.index)}"
+    Name = "${var.name}-public-${data.aws_availability_zone.all.*.name_suffix[count.index]}"
   }
 }
 
@@ -48,6 +48,6 @@ resource "aws_subnet" "spare" {
   cidr_block = "${cidrsubnet(cidrsubnet(aws_vpc.main.cidr_block, 4, 2 * count.index + 1), 1, 1)}"
   ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 32 * count.index + 2)}"
   tags {
-    Name = "${var.name}-private-${element(data.aws_availability_zone.all.*.name_suffix, count.index)}"
+    Name = "${var.name}-reserved-${data.aws_availability_zone.all.*.name_suffix[count.index]}"
   }
 }
