@@ -1,3 +1,24 @@
+resource "aws_default_security_group" "allow_group" {
+  description = "Allow group traffic"
+  vpc_id = "${aws_vpc.main.id}"
+  ingress {
+    protocol = "-1"
+    from_port = 0
+    to_port = 0
+    self = true
+  }
+  egress {
+    protocol = "-1"
+    from_port = 0
+    to_port = 0
+    cidr_blocks = [ "0.0.0.0/0" ]
+    ipv6_cidr_blocks = [ "::/0" ]
+  }
+  tags {
+    Name = "default-allow-group"
+  }
+}
+
 resource "aws_security_group" "allow_all" {
   name = "allow-all"
   description = "Allow all traffic"
@@ -17,7 +38,7 @@ resource "aws_security_group" "allow_all" {
     ipv6_cidr_blocks = [ "::/0" ]
   }
   tags {
-    Name = "${var.name}-allow-all"
+    Name = "default-allow-all"
   }
 }
 
@@ -32,13 +53,6 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = [ "0.0.0.0/0" ]
     ipv6_cidr_blocks = [ "::/0" ]
   }
-  ingress {
-    protocol = "tcp"
-    from_port = 8080
-    to_port = 8080
-    cidr_blocks = [ "0.0.0.0/0" ]
-    ipv6_cidr_blocks = [ "::/0" ]
-  }
   egress {
     protocol = "-1"
     from_port = 0
@@ -47,7 +61,7 @@ resource "aws_security_group" "allow_http" {
     ipv6_cidr_blocks = [ "::/0" ]
   }
   tags {
-    Name = "${var.name}-allow-http"
+    Name = "default-allow-http"
   }
 }
 
@@ -62,13 +76,6 @@ resource "aws_security_group" "allow_https" {
     cidr_blocks = [ "0.0.0.0/0" ]
     ipv6_cidr_blocks = [ "::/0" ]
   }
-  ingress {
-    protocol = "tcp"
-    from_port = 8443
-    to_port = 8443
-    cidr_blocks = [ "0.0.0.0/0" ]
-    ipv6_cidr_blocks = [ "::/0" ]
-  }
   egress {
     protocol = "-1"
     from_port = 0
@@ -77,7 +84,7 @@ resource "aws_security_group" "allow_https" {
     ipv6_cidr_blocks = [ "::/0" ]
   }
   tags {
-    Name = "${var.name}-allow-https"
+    Name = "default-allow-https"
   }
 }
 
@@ -100,7 +107,7 @@ resource "aws_security_group" "allow_ssh" {
     ipv6_cidr_blocks = [ "::/0" ]
   }
   tags {
-    Name = "${var.name}-allow-ssh"
+    Name = "default-allow-ssh"
   }
 }
 
@@ -128,6 +135,6 @@ resource "aws_security_group" "allow_icmp" {
     ipv6_cidr_blocks = [ "::/0" ]
   }
   tags {
-    Name = "${var.name}-allow-icmp"
+    Name = "default-allow-icmp"
   }
 }

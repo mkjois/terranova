@@ -1,3 +1,43 @@
+resource "aws_default_network_acl" "public" {
+  default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
+  subnet_ids = [ "${aws_subnet.public.*.id}" ]
+  ingress {
+    rule_no = 100
+    protocol = -1
+    from_port = 0
+    to_port = 0
+    cidr_block = "0.0.0.0/0"
+    action = "allow"
+  }
+  ingress {
+    rule_no = 101
+    protocol = -1
+    from_port = 0
+    to_port = 0
+    ipv6_cidr_block = "::/0"
+    action = "allow"
+  }
+  egress {
+    rule_no = 100
+    protocol = -1
+    from_port = 0
+    to_port = 0
+    cidr_block = "0.0.0.0/0"
+    action = "allow"
+  }
+  egress {
+    rule_no = 101
+    protocol = -1
+    from_port = 0
+    to_port = 0
+    ipv6_cidr_block = "::/0"
+    action = "allow"
+  }
+  tags {
+    Name = "${var.name}-public"
+  }
+}
+
 resource "aws_network_acl" "private" {
   vpc_id = "${aws_vpc.main.id}"
   subnet_ids = [ "${aws_subnet.private.*.id}" ]

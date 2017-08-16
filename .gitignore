@@ -20,5 +20,8 @@ local.*
 *.tfstate
 *.tfstate.*
 
+# Testing arbitrary Terraform
+tftest*
+
 # Unzipped binaries
 bin
