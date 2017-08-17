@@ -14,5 +14,3 @@ Visit each module for full details.
   * NAT gateway for private subnets, with optional redundancy
   * Starter pack of security groups to test with
   * IPv6 included
-
-(readme loading...)

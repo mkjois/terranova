@@ -50,6 +50,21 @@ resource "aws_route" "private_all_ipv4" {
   count = "${min(max(var.ngw_redundancy, 0), length(data.aws_availability_zones.all.names))}"
   route_table_id = "${aws_route_table.private.*.id[count.index]}"
   destination_cidr_block = "0.0.0.0/0"
+  /**
+   * WHAT IS THIS BLACK MAGIC?
+   *
+   * let A = matchkeys(aws_subnet.public.*.id, aws_subnet.public.*.availability_zone, data.aws_availability_zones.available.names)
+   * let B = matchkeys(aws_nat_gateway.main.*.id, aws_nat_gateway.main.*.subnet_id, A)
+   * let nat_gateway_id = element(B, count.index)
+   *
+   * A) Public subnet IDs of subnets in AVAILABLE zones (as opposed to ALL zones)
+   * B) NAT gateway IDs in the subnets from (A)
+   *
+   * The effect is to distribute the egress traffic of private subnets across only the AVAILABLE NAT gateways.
+   * The motivation is that NAT gateways aren't replicated across AZs
+   * The awesomeness (hopefully) is that if an AZ goes down, you can re-apply this module so that all the private route tables
+   *   get updated to using only the AVAILABLE NAT gateways.
+   */
   nat_gateway_id = "${element(matchkeys(aws_nat_gateway.main.*.id, aws_nat_gateway.main.*.subnet_id, matchkeys(aws_subnet.public.*.id, aws_subnet.public.*.availability_zone, data.aws_availability_zones.available.names)), count.index)}"
 }
 
